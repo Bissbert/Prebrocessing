@@ -1,0 +1,3 @@
+# Project exclude paths
+/FileGenerator/target/
+/PrebrocessingUtils/target/
