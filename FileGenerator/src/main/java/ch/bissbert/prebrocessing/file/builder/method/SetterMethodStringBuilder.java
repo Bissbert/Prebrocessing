@@ -20,7 +20,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
-final public class SetterMethodStringBuilder extends MethodStringBuilder {
+public class SetterMethodStringBuilder extends MethodStringBuilder {
     public SetterMethodStringBuilder(String name, TypeMirror type) {
         super(
                 generateSetterName(name),

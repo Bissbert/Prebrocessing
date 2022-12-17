@@ -19,7 +19,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
-final public class JavaMethodParamStringBuilder implements JavaStringable {
+public class JavaMethodParamStringBuilder implements JavaStringable {
     private TypeMirror type;
     private String name;
     private boolean isFinal;

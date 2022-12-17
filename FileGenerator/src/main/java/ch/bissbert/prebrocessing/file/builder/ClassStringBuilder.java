@@ -22,7 +22,7 @@ import java.util.*;
  */
 @Getter
 @Setter
-public final class ClassStringBuilder implements JavaStringable {
+public class ClassStringBuilder implements JavaStringable {
     private List<ConstructorStringBuilder> constructorStringBuilders;
     private List<AttributeStringBuilder> attributeStringBuilders;
     private List<MethodStringBuilder> methodStringBuilders;

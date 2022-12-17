@@ -21,7 +21,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
-final public class GetterMethodStringBuilder extends MethodStringBuilder {
+public class GetterMethodStringBuilder extends MethodStringBuilder {
     public GetterMethodStringBuilder(String name, TypeMirror type) {
         super(generateGetterName(name), type, generateGetterText(name), Set.of(Modifier.PUBLIC));
     }
