@@ -12,6 +12,8 @@
         <junit.version>4.13.1</junit.version>
         <mockito.core.version>4.8.0</mockito.core.version>
         <log4j.version>2.19.0</log4j.version>
+        <sonar.organization>bissbert</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <groupId>ch.bissbert</groupId>
