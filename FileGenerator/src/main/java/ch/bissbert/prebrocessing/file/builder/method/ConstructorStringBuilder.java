@@ -24,9 +24,9 @@ import java.util.Set;
  */
 @Getter
 @Setter
-final public class ConstructorStringBuilder extends MethodStringBuilder {
+public class ConstructorStringBuilder extends MethodStringBuilder {
 
-    private final static String CONSTRUCTOR_NAME = "\\Constructor\\";
+    private static final String CONSTRUCTOR_NAME = "\\Constructor\\";
 
     public ConstructorStringBuilder(String className, String methodContent, Set<Modifier> modifiers, List<JavaMethodParamStringBuilder> paramBuilderList) {
         super(CONSTRUCTOR_NAME, new SimpleNameTypeMirror(className), methodContent, modifiers, paramBuilderList);

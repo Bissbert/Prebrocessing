@@ -5,9 +5,11 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVisitor;
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-final public class SimpleNameTypeMirror implements TypeMirror {
+public final class SimpleNameTypeMirror implements TypeMirror {
     private String name;
 
     public SimpleNameTypeMirror(String name) {
@@ -26,7 +28,7 @@ final public class SimpleNameTypeMirror implements TypeMirror {
 
     @Override
     public List<? extends AnnotationMirror> getAnnotationMirrors() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
@@ -36,7 +38,7 @@ final public class SimpleNameTypeMirror implements TypeMirror {
 
     @Override
     public <A extends Annotation> A[] getAnnotationsByType(Class<A> annotationType) {
-        return null;
+        return (A[]) new Annotation[0];
     }
 
     @Override

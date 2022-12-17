@@ -19,7 +19,7 @@ import java.util.Set;
  */
 @Getter
 @Setter
-final public class AttributeStringBuilder extends JavaElement {
+public class AttributeStringBuilder extends JavaElement {
     public AttributeStringBuilder(String name, TypeMirror type, Set<Modifier> modifiers) {
         super(name, type, modifiers);
 

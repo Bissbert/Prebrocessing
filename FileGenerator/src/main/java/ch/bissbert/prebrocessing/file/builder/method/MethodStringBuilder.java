@@ -24,7 +24,7 @@ import java.util.StringJoiner;
  */
 @Getter
 @Setter
-sealed public class MethodStringBuilder extends JavaElement permits ConstructorStringBuilder, GetterMethodStringBuilder, SetterMethodStringBuilder {
+public class MethodStringBuilder extends JavaElement {
 
     private List<JavaMethodParamStringBuilder> paramBuilderList;
     private String methodContent;
