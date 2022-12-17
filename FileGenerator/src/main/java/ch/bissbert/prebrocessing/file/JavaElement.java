@@ -26,7 +26,7 @@ public abstract class JavaElement implements JavaStringable {
         return modifiers.contains(Modifier.STATIC);
     }
 
-    public JavaElement(String name, TypeMirror type, Set<Modifier> modifiers) {
+    protected JavaElement(String name, TypeMirror type, Set<Modifier> modifiers) {
         this.modifiers = modifiers;
         this.name = name;
         this.type = type;

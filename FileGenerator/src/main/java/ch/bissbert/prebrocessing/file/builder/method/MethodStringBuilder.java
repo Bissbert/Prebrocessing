@@ -3,7 +3,6 @@ package ch.bissbert.prebrocessing.file.builder.method;
 
 import ch.bissbert.prebrocessing.file.JavaElement;
 import ch.bissbert.prebrocessing.file.JavaStringable;
-import ch.bissbert.prebrocessing.file.Visibility;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
-import java.util.HashSet;
 import java.util.Set;
 
 /**

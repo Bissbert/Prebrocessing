@@ -2,7 +2,6 @@ package ch.bissbert.prebrocessing.file.builder;
 
 
 import ch.bissbert.prebrocessing.file.JavaElement;
-import ch.bissbert.prebrocessing.file.Visibility;
 import lombok.Getter;
 import lombok.Setter;
 
