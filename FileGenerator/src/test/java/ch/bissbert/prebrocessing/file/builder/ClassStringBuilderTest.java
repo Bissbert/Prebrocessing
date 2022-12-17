@@ -9,7 +9,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import javax.lang.model.element.Modifier;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -89,8 +92,12 @@ public class ClassStringBuilderTest {
                             {
                                 add(new ConstructorStringBuilder(
                                         "Person",
-                                        Visibility.PUBLIC,
-                                        ""
+                                        "",
+                                        new HashSet<>() {
+                                            {
+                                                add(Modifier.PUBLIC);
+                                            }
+                                        }
                                 ));
                             }
                         },
@@ -114,12 +121,13 @@ public class ClassStringBuilderTest {
                         new ArrayList<MethodStringBuilder>() {
                             {
                                 add(new MethodStringBuilder(
-                                        false,
                                         "getName",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PUBLIC,
-                                        ""
-                                ));
+                                        "",
+                                        new HashSet<Modifier>() {{
+                                            add(Modifier.PUBLIC);
+                                        }})
+                                );
                             }
                         },
                         new ArrayList<AttributeStringBuilder>(),
@@ -142,11 +150,12 @@ public class ClassStringBuilderTest {
                         new ArrayList<AttributeStringBuilder>() {
                             {
                                 add(new AttributeStringBuilder(
-                                        false,
-                                        false,
                                         "name",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PRIVATE));
+                                        new HashSet<>() {{
+                                            add(Modifier.PRIVATE);
+                                        }}
+                                ));
                             }
                         },
                         "package ch.bissbert.test;\n" +
@@ -166,11 +175,13 @@ public class ClassStringBuilderTest {
                         new ArrayList<MethodStringBuilder>() {
                             {
                                 add(new MethodStringBuilder(
-                                        true,
                                         "getName",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PUBLIC,
-                                        ""
+                                        "",
+                                        new HashSet<>() {{
+                                            add(Modifier.PUBLIC);
+                                            add(Modifier.STATIC);
+                                        }}
                                 ));
                             }
                         },
@@ -194,11 +205,13 @@ public class ClassStringBuilderTest {
                         new ArrayList<AttributeStringBuilder>() {
                             {
                                 add(new AttributeStringBuilder(
-                                        true,
-                                        false,
                                         "name",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PRIVATE));
+                                        new HashSet<>() {{
+                                            add(Modifier.PRIVATE);
+                                            add(Modifier.STATIC);
+                                        }}
+                                ));
                             }
                         },
                         "package ch.bissbert.test;\n" +
@@ -219,11 +232,14 @@ public class ClassStringBuilderTest {
                         new ArrayList<AttributeStringBuilder>() {
                             {
                                 add(new AttributeStringBuilder(
-                                        true,
-                                        true,
                                         "name",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PRIVATE));
+                                        new HashSet<>() {{
+                                            add(Modifier.FINAL);
+                                            add(Modifier.STATIC);
+                                            add(Modifier.PRIVATE);
+                                        }}
+                                ));
                             }
                         },
                         "package ch.bissbert.test;\n" +
@@ -244,17 +260,20 @@ public class ClassStringBuilderTest {
                         new ArrayList<AttributeStringBuilder>() {
                             {
                                 add(new AttributeStringBuilder(
-                                        true,
-                                        false,
                                         "name",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PRIVATE));
+                                        new HashSet<>() {{
+                                            add(Modifier.PRIVATE);
+                                            add(Modifier.STATIC);
+                                        }}
+                                ));
                                 add(new AttributeStringBuilder(
-                                        false,
-                                        false,
                                         "age",
                                         new SimpleNameTypeMirror("java.lang.Integer"),
-                                        Visibility.PRIVATE));
+                                        new HashSet<>() {{
+                                            add(Modifier.PRIVATE);
+                                        }}
+                                ));
                             }
                         },
                         "package ch.bissbert.test;\n" +
@@ -277,18 +296,21 @@ public class ClassStringBuilderTest {
                         new ArrayList<MethodStringBuilder>() {
                             {
                                 add(new MethodStringBuilder(
-                                        true,
                                         "getName",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PUBLIC,
-                                        ""
+                                        "",
+                                        new HashSet<>() {{
+                                            add(Modifier.PUBLIC);
+                                            add(Modifier.STATIC);
+                                        }}
                                 ));
                                 add(new MethodStringBuilder(
-                                        false,
                                         "getAge",
                                         new SimpleNameTypeMirror("java.lang.Integer"),
-                                        Visibility.PUBLIC,
-                                        ""
+                                        "",
+                                        new HashSet<>() {{
+                                            add(Modifier.PUBLIC);
+                                        }}
                                 ));
                             }
                         },
@@ -315,22 +337,25 @@ public class ClassStringBuilderTest {
                         new ArrayList<MethodStringBuilder>() {
                             {
                                 add(new MethodStringBuilder(
-                                        false,
                                         "getAge",
                                         new SimpleNameTypeMirror("java.lang.Integer"),
-                                        Visibility.PUBLIC,
-                                        ""
+                                        "",
+                                        new HashSet<>() {{
+                                            add(Modifier.PUBLIC);
+                                        }}
                                 ));
                             }
                         },
                         new ArrayList<AttributeStringBuilder>() {
                             {
                                 add(new AttributeStringBuilder(
-                                        true,
-                                        false,
                                         "name",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PRIVATE));
+                                        new HashSet<>() {{
+                                            add(Modifier.PRIVATE);
+                                            add(Modifier.STATIC);
+                                        }}
+                                ));
                             }
                         },
                         "package ch.bissbert.test;\n" +
@@ -354,22 +379,25 @@ public class ClassStringBuilderTest {
                         new ArrayList<MethodStringBuilder>() {
                             {
                                 add(new MethodStringBuilder(
-                                        true,
                                         "getName",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PUBLIC,
-                                        ""
+                                        "",
+                                        new HashSet<>() {{
+                                            add(Modifier.PUBLIC);
+                                            add(Modifier.STATIC);
+                                        }}
                                 ));
                             }
                         },
                         new ArrayList<AttributeStringBuilder>() {
                             {
                                 add(new AttributeStringBuilder(
-                                        false,
-                                        false,
                                         "age",
                                         new SimpleNameTypeMirror("java.lang.Integer"),
-                                        Visibility.PRIVATE));
+                                        new HashSet<>() {{
+                                            add(Modifier.PRIVATE);
+                                        }})
+                                );
                             }
                         },
                         "package ch.bissbert.test;\n" +
@@ -393,29 +421,33 @@ public class ClassStringBuilderTest {
                         new ArrayList<MethodStringBuilder>() {
                             {
                                 add(new MethodStringBuilder(
-                                        true,
                                         "getName",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PUBLIC,
-                                        ""
+                                        "",
+                                        new HashSet<>() {{
+                                            add(Modifier.PUBLIC);
+                                            add(Modifier.STATIC);
+                                        }}
                                 ));
                                 add(new MethodStringBuilder(
-                                        false,
                                         "getAge",
                                         new SimpleNameTypeMirror("java.lang.Integer"),
-                                        Visibility.PUBLIC,
-                                        ""
+                                        "",
+                                        new HashSet<>() {{
+                                            add(Modifier.PUBLIC);
+                                        }}
                                 ));
                             }
                         },
                         new ArrayList<AttributeStringBuilder>() {
                             {
                                 add(new AttributeStringBuilder(
-                                        false,
-                                        false,
                                         "age",
                                         new SimpleNameTypeMirror("java.lang.Integer"),
-                                        Visibility.PRIVATE));
+                                        new HashSet<>() {{
+                                            add(Modifier.PRIVATE);
+                                        }}
+                                ));
                             }
                         },
                         "package ch.bissbert.test;\n" +
@@ -443,28 +475,32 @@ public class ClassStringBuilderTest {
                         new ArrayList<MethodStringBuilder>() {
                             {
                                 add(new MethodStringBuilder(
-                                        false,
                                         "getAge",
                                         new SimpleNameTypeMirror("java.lang.Integer"),
-                                        Visibility.PUBLIC,
-                                        ""
+                                        "",
+                                        new HashSet<>() {{
+                                            add(Modifier.PUBLIC);
+                                        }}
                                 ));
                             }
                         },
                         new ArrayList<AttributeStringBuilder>() {
                             {
                                 add(new AttributeStringBuilder(
-                                        true,
-                                        false,
                                         "name",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PRIVATE));
+                                        new HashSet<>() {{
+                                            add(Modifier.PRIVATE);
+                                            add(Modifier.STATIC);
+                                        }}
+                                ));
                                 add(new AttributeStringBuilder(
-                                        false,
-                                        false,
                                         "age",
                                         new SimpleNameTypeMirror("java.lang.Integer"),
-                                        Visibility.PRIVATE));
+                                        new HashSet<>() {{
+                                            add(Modifier.PRIVATE);
+                                        }})
+                                );
                             }
                         },
                         "package ch.bissbert.test;\n" +
@@ -491,35 +527,41 @@ public class ClassStringBuilderTest {
                         new ArrayList<MethodStringBuilder>() {
                             {
                                 add(new MethodStringBuilder(
-                                        true,
                                         "getName",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PUBLIC,
-                                        ""
+                                        "",
+                                        new HashSet<>() {{
+                                            add(Modifier.PUBLIC);
+                                            add(Modifier.STATIC);
+                                        }}
                                 ));
                                 add(new MethodStringBuilder(
-                                        false,
                                         "getAge",
                                         new SimpleNameTypeMirror("java.lang.Integer"),
-                                        Visibility.PUBLIC,
-                                        ""
+                                        "",
+                                        new HashSet<>() {{
+                                            add(Modifier.PUBLIC);
+                                        }}
                                 ));
                             }
                         },
                         new ArrayList<AttributeStringBuilder>() {
                             {
                                 add(new AttributeStringBuilder(
-                                        true,
-                                        false,
                                         "name",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PRIVATE));
+                                        new HashSet<>() {{
+                                            add(Modifier.PRIVATE);
+                                            add(Modifier.STATIC);
+                                        }}
+                                ));
                                 add(new AttributeStringBuilder(
-                                        false,
-                                        false,
                                         "age",
                                         new SimpleNameTypeMirror("java.lang.Integer"),
-                                        Visibility.PRIVATE));
+                                        new HashSet<>() {{
+                                            add(Modifier.PRIVATE);
+                                        }}
+                                ));
                             }
                         },
                         "package ch.bissbert.test;\n" +
@@ -550,43 +592,51 @@ public class ClassStringBuilderTest {
                             {
                                 add(new ConstructorStringBuilder(
                                         "Person",
-                                        Visibility.PUBLIC,
-                                        ""
+                                        "",
+                                        new HashSet<>() {{
+                                            add(Modifier.PUBLIC);
+                                        }}
                                 ));
                             }
                         },
                         new ArrayList<MethodStringBuilder>() {
                             {
                                 add(new MethodStringBuilder(
-                                        true,
                                         "getName",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PUBLIC,
-                                        ""
+                                        "",
+                                        new HashSet<>() {{
+                                            add(Modifier.PUBLIC);
+                                            add(Modifier.STATIC);
+                                        }}
                                 ));
                                 add(new MethodStringBuilder(
-                                        false,
                                         "getAge",
                                         new SimpleNameTypeMirror("java.lang.Integer"),
-                                        Visibility.PUBLIC,
-                                        ""
+                                        "",
+                                        new HashSet<>() {{
+                                            add(Modifier.PUBLIC);
+                                        }}
                                 ));
                             }
                         },
                         new ArrayList<AttributeStringBuilder>() {
                             {
                                 add(new AttributeStringBuilder(
-                                        true,
-                                        false,
                                         "name",
                                         new SimpleNameTypeMirror("java.lang.String"),
-                                        Visibility.PRIVATE));
+                                        new HashSet<>() {{
+                                            add(Modifier.PRIVATE);
+                                            add(Modifier.STATIC);
+                                        }}
+                                ));
                                 add(new AttributeStringBuilder(
-                                        false,
-                                        false,
                                         "age",
                                         new SimpleNameTypeMirror("java.lang.Integer"),
-                                        Visibility.PRIVATE));
+                                        new HashSet<>() {{
+                                            add(Modifier.PRIVATE);
+                                        }}
+                                ));
                             }
                         },
                         "package ch.bissbert.test;\n" +
@@ -663,13 +713,25 @@ public class ClassStringBuilderTest {
 
     @Before
     public void setUp() {
+        Set<Modifier> modifiers = new HashSet<>();
+
+        if (this.isAbstract) {
+            modifiers.add(Modifier.ABSTRACT);
+        }
+        if (this.isFinal) {
+            modifiers.add(Modifier.FINAL);
+        }
+        if (visibility.toModifier() != null) {
+            modifiers.add(visibility.toModifier());
+        }
+
         classStringBuilder = new ClassStringBuilder(
-                name, packageName, constructors,
+                name,
+                packageName,
+                constructors,
                 attributes,
                 methods,
-                isAbstract,
-                isFinal,
-                visibility
+                modifiers
         );
     }
 
@@ -698,17 +760,17 @@ public class ClassStringBuilderTest {
 
     @Test
     public void isAbstract() {
-        assertEquals(isAbstract, classStringBuilder.isAbstract());
+        assertEquals(isAbstract, classStringBuilder.getModifiers().contains(Modifier.ABSTRACT));
     }
 
     @Test
     public void isFinal() {
-        assertEquals(isFinal, classStringBuilder.isFinal());
+        assertEquals(isFinal, classStringBuilder.getModifiers().contains(Modifier.FINAL));
     }
 
     @Test
     public void getVisibility() {
-        assertEquals(visibility, classStringBuilder.getVisibility());
+        assertEquals(visibility, Visibility.getVisibility(classStringBuilder.getModifiers()));
     }
 
     @Test

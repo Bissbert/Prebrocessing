@@ -6,11 +6,11 @@ import ch.bissbert.prebrocessing.file.JavaStringable;
 import ch.bissbert.prebrocessing.file.Visibility;
 import ch.bissbert.prebrocessing.file.builder.method.ConstructorStringBuilder;
 import ch.bissbert.prebrocessing.file.builder.method.MethodStringBuilder;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.StringJoiner;
+import javax.lang.model.element.Modifier;
+import java.util.*;
 
 /**
  * A class that contains the basic information for a class as well as the producing the java code for it.
@@ -20,15 +20,16 @@ import java.util.StringJoiner;
  * @see JavaStringable
  * @since 1.0
  */
+@Getter
+@Setter
 public final class ClassStringBuilder implements JavaStringable {
-    private final List<ConstructorStringBuilder> constructorStringBuilders;
-    private final List<AttributeStringBuilder> attributeStringBuilders;
-    private final List<MethodStringBuilder> methodStringBuilders;
-    private final boolean isAbstract;
-    private final boolean isFinal;
-    private final Visibility visibility;
-    private final String name;
-    private final String packageName;
+    private List<ConstructorStringBuilder> constructorStringBuilders;
+    private List<AttributeStringBuilder> attributeStringBuilders;
+    private List<MethodStringBuilder> methodStringBuilders;
+    private String name;
+    private String packageName;
+
+    private Set<Modifier> modifiers;
 
     public ClassStringBuilder(
             String name,
@@ -36,25 +37,24 @@ public final class ClassStringBuilder implements JavaStringable {
             List<ConstructorStringBuilder> constructorStringBuilders,
             List<AttributeStringBuilder> attributeStringBuilders,
             List<MethodStringBuilder> methodStringBuilders,
-            boolean isAbstract,
-            boolean isFinal,
-            Visibility visibility
+            Set<Modifier> modifiers
     ) {
         List<String> errors = new ArrayList<>();
 
-        if (isFinal && isAbstract) {
+        if (modifiers.contains(Modifier.FINAL) && modifiers.contains(Modifier.ABSTRACT)) {
             errors.add("A class can't be final and abstract at the same time.");
         }
 
-        if (visibility == Visibility.PRIVATE) {
+
+        if (modifiers.contains(Modifier.PRIVATE)) {
             errors.add("A class can't be private.");
         }
 
-        if (visibility == Visibility.PROTECTED) {
+        if (modifiers.contains(Modifier.PROTECTED)) {
             errors.add("A class can't be protected.");
         }
 
-        if (visibility == Visibility.PACKAGE_PRIVATE && (packageName == null || packageName.isBlank())) {
+        if (Visibility.getVisibility(modifiers) == Visibility.PACKAGE_PRIVATE && (packageName == null || packageName.isBlank())) {
             errors.add("A class can't be package private if it is not in a package.");
         }
 
@@ -69,96 +69,19 @@ public final class ClassStringBuilder implements JavaStringable {
         this.constructorStringBuilders = Objects.requireNonNullElseGet(constructorStringBuilders, ArrayList::new);
         this.attributeStringBuilders = Objects.requireNonNullElseGet(attributeStringBuilders, ArrayList::new);
         this.methodStringBuilders = Objects.requireNonNullElseGet(methodStringBuilders, ArrayList::new);
-        this.isAbstract = isAbstract;
-        this.isFinal = isFinal;
-        this.visibility = visibility;
+        this.modifiers = modifiers;
         this.name = name;
         this.packageName = packageName;
     }
 
     public ClassStringBuilder(
             String name,
-            String packageName,
             List<ConstructorStringBuilder> constructorStringBuilders,
             List<AttributeStringBuilder> attributeStringBuilders,
             List<MethodStringBuilder> methodStringBuilders,
-            Visibility visibility
+            Set<Modifier> modifiers
     ) {
-        this(name, packageName, constructorStringBuilders, attributeStringBuilders, methodStringBuilders, false, false, visibility);
-    }
-
-    public ClassStringBuilder(
-            String name,
-            List<ConstructorStringBuilder> constructorStringBuilders,
-            List<AttributeStringBuilder> attributeStringBuilders,
-            List<MethodStringBuilder> methodStringBuilders,
-            boolean isAbstract,
-            boolean isFinal,
-            Visibility visibility
-    ) {
-        this(name, null, constructorStringBuilders, attributeStringBuilders, methodStringBuilders, isAbstract, isFinal, visibility);
-    }
-
-    public ClassStringBuilder(
-            String name,
-            List<ConstructorStringBuilder> constructorStringBuilders,
-            List<AttributeStringBuilder> attributeStringBuilders,
-            List<MethodStringBuilder> methodStringBuilders,
-            boolean isAbstract,
-            boolean isFinal
-    ) {
-        this(name, null, constructorStringBuilders, attributeStringBuilders, methodStringBuilders, isAbstract, isFinal, Visibility.PUBLIC);
-    }
-
-    public ClassStringBuilder(
-            String name,
-            List<ConstructorStringBuilder> constructorStringBuilders,
-            List<AttributeStringBuilder> attributeStringBuilders,
-            List<MethodStringBuilder> methodStringBuilders,
-            boolean isAbstract
-    ) {
-        this(name, null, constructorStringBuilders, attributeStringBuilders, methodStringBuilders, isAbstract, false, Visibility.PUBLIC);
-    }
-
-    public ClassStringBuilder(
-            String name,
-            List<ConstructorStringBuilder> constructorStringBuilders,
-            List<AttributeStringBuilder> attributeStringBuilders,
-            List<MethodStringBuilder> methodStringBuilders
-    ) {
-        this(name, null, constructorStringBuilders, attributeStringBuilders, methodStringBuilders, false, false, Visibility.PUBLIC);
-    }
-
-    public List<ConstructorStringBuilder> getConstructorStringBuilders() {
-        return constructorStringBuilders;
-    }
-
-    public List<AttributeStringBuilder> getAttributeStringBuilders() {
-        return attributeStringBuilders;
-    }
-
-    public List<MethodStringBuilder> getMethodStringBuilders() {
-        return methodStringBuilders;
-    }
-
-    public boolean isAbstract() {
-        return isAbstract;
-    }
-
-    public boolean isFinal() {
-        return isFinal;
-    }
-
-    public Visibility getVisibility() {
-        return visibility;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPackageName() {
-        return packageName;
+        this(name, null, constructorStringBuilders, attributeStringBuilders, methodStringBuilders, modifiers);
     }
 
     /**
@@ -191,9 +114,9 @@ public final class ClassStringBuilder implements JavaStringable {
             sectionJoiner.add(getSectionString("methods", nonStaticMethodStringBuilders));
         }
 
-        final String classString = (visibility.equals(Visibility.PACKAGE_PRIVATE) ? "" : visibility.value + " ")
-                + (isAbstract ? "abstract " : "")
-                + (isFinal ? "final " : "")
+        final String classString = (Visibility.getVisibility(modifiers).equals(Visibility.PACKAGE_PRIVATE) ? "" : Visibility.getVisibility(modifiers).value + " ")
+                + (isAbstract() ? "abstract " : "")
+                + (isFinal() ? "final " : "")
                 + "class "
                 + name
                 + " {"
@@ -211,6 +134,14 @@ public final class ClassStringBuilder implements JavaStringable {
         packageJoiner.add(classString);
 
         return packageJoiner.toString();
+    }
+
+    private boolean isFinal() {
+        return modifiers.contains(Modifier.FINAL);
+    }
+
+    private boolean isAbstract() {
+        return modifiers.contains(Modifier.ABSTRACT);
     }
 
     private String getSectionString(String sectionComment, List<? extends JavaStringable> javaStringableList) {

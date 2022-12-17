@@ -4,10 +4,14 @@ package ch.bissbert.prebrocessing.file.builder.method;
 import ch.bissbert.prebrocessing.file.JavaElement;
 import ch.bissbert.prebrocessing.file.JavaStringable;
 import ch.bissbert.prebrocessing.file.Visibility;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.StringJoiner;
 
 /**
@@ -19,13 +23,15 @@ import java.util.StringJoiner;
  * @see JavaStringable
  * @since 1.0
  */
+@Getter
+@Setter
 sealed public class MethodStringBuilder extends JavaElement permits ConstructorStringBuilder, GetterMethodStringBuilder, SetterMethodStringBuilder {
 
-    private final List<JavaMethodParamStringBuilder> paramBuilderList;
-    private final String methodContent;
+    private List<JavaMethodParamStringBuilder> paramBuilderList;
+    private String methodContent;
 
-    public MethodStringBuilder(boolean isStatic, String name, TypeMirror type, Visibility visibility, String methodContent, List<JavaMethodParamStringBuilder> paramBuilderList) {
-        super(isStatic, name, type, visibility);
+    public MethodStringBuilder(String name, TypeMirror type, String methodContent, Set<Modifier> modifiers, List<JavaMethodParamStringBuilder> paramBuilderList) {
+        super(name, type, modifiers);
         //check that name is not empty or null
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("name must not be null or empty");
@@ -34,32 +40,12 @@ sealed public class MethodStringBuilder extends JavaElement permits ConstructorS
         this.methodContent = methodContent;
     }
 
-    public MethodStringBuilder(boolean isStatic, String name, TypeMirror type, Visibility visibility, String methodContent, JavaMethodParamStringBuilder... paramBuilderList) {
-        this(isStatic, name, type, visibility, methodContent, new ArrayList<>(List.of(paramBuilderList)));
+    public MethodStringBuilder(String name, TypeMirror type, String methodContent, Set<Modifier> modifiers, JavaMethodParamStringBuilder... paramBuilderList) {
+        this(name, type, methodContent, modifiers, new ArrayList<>(List.of(paramBuilderList)));
     }
 
-    public MethodStringBuilder(boolean isStatic, String name, TypeMirror type, Visibility visibility, String methodContent) {
-        this(isStatic, name, type, visibility, methodContent, new ArrayList<>());
-    }
-
-    public MethodStringBuilder(String name, TypeMirror type, Visibility visibility, String methodContent, List<JavaMethodParamStringBuilder> paramBuilderList) {
-        this(false, name, type, visibility, methodContent, paramBuilderList);
-    }
-
-    public MethodStringBuilder(String name, TypeMirror type, Visibility visibility, String methodContent, JavaMethodParamStringBuilder... paramBuilderList) {
-        this(false, name, type, visibility, methodContent, paramBuilderList);
-    }
-
-    public MethodStringBuilder(String name, TypeMirror type, Visibility visibility, String methodContent) {
-        this(false, name, type, visibility, methodContent);
-    }
-
-    public List<JavaMethodParamStringBuilder> getParamBuilderList() {
-        return paramBuilderList;
-    }
-
-    public String getMethodContent() {
-        return methodContent;
+    public MethodStringBuilder(String name, TypeMirror type, String methodContent, Set<Modifier> modifiers) {
+        this(name, type, methodContent, modifiers, new ArrayList<>());
     }
 
     @Override

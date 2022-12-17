@@ -4,54 +4,89 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class JavaElementTest {
 
-    private final boolean isStatic;
     private final String name;
     private final String type;
-    private final Visibility visibility;
+    private final Set<Modifier> modifiers;
     private JavaElement javaElement;
 
     @Parameterized.Parameters
     public static Object[][] data() {
         return new Object[][]{
-                // isStatic, name, type, visibility
-                {false, "name", "java.lang.String", Visibility.PUBLIC},
-                {false, "name", "java.lang.String", Visibility.PROTECTED},
-                {false, "name", "java.lang.String", Visibility.PACKAGE_PRIVATE},
-                {false, "name", "java.lang.String", Visibility.PRIVATE},
-                {false, "age", "java.lang.Integer", Visibility.PUBLIC},
-                {false, "age", "java.lang.Integer", Visibility.PROTECTED},
-                {false, "age", "java.lang.Integer", Visibility.PACKAGE_PRIVATE},
-                {false, "age", "java.lang.Integer", Visibility.PRIVATE},
-                {true, "name", "java.lang.String", Visibility.PUBLIC},
-                {true, "name", "java.lang.String", Visibility.PROTECTED},
-                {true, "name", "java.lang.String", Visibility.PACKAGE_PRIVATE},
-                {true, "name", "java.lang.String", Visibility.PRIVATE},
-                {true, "age", "java.lang.Integer", Visibility.PUBLIC},
-                {true, "age", "java.lang.Integer", Visibility.PROTECTED},
-                {true, "age", "java.lang.Integer", Visibility.PACKAGE_PRIVATE},
-                {true, "age", "java.lang.Integer", Visibility.PRIVATE},
+                // name, type, modifiers
+                {"name", "java.lang.String", new HashSet<>() {{
+                    add(Modifier.PUBLIC);
+                }}},
+                {"name", "java.lang.String", new HashSet<>() {{
+                    add(Modifier.PROTECTED);
+                }},},
+                {"name", "java.lang.String", new HashSet<>()},
+                {"name", "java.lang.String", new HashSet<>() {{
+                    add(Modifier.PRIVATE);
+                }},},
+                {"age", "java.lang.Integer", new HashSet<>() {{
+                    add(Modifier.PUBLIC);
+                }},},
+                {"age", "java.lang.Integer", new HashSet<>() {{
+                    add(Modifier.PROTECTED);
+                }},},
+                {"age", "java.lang.Integer", new HashSet<>(),},
+                {"age", "java.lang.Integer", new HashSet<>() {{
+                    add(Modifier.PRIVATE);
+                }},},
+                {"name", "java.lang.String", new HashSet<>() {{
+                    add(Modifier.PUBLIC);
+                    add(Modifier.STATIC);
+                }},},
+                {"name", "java.lang.String", new HashSet<>() {{
+                    add(Modifier.PROTECTED);
+                    add(Modifier.STATIC);
+                }},},
+                {"name", "java.lang.String", new HashSet<>() {{
+                    add(Modifier.STATIC);
+                }},},
+                {"name", "java.lang.String", new HashSet<>() {{
+                    add(Modifier.PRIVATE);
+                    add(Modifier.STATIC);
+                }},},
+                {"age", "java.lang.Integer", new HashSet<>() {{
+                    add(Modifier.PUBLIC);
+                    add(Modifier.STATIC);
+                }},},
+                {"age", "java.lang.Integer", new HashSet<>() {{
+                    add(Modifier.PROTECTED);
+                    add(Modifier.STATIC);
+                }},},
+                {"age", "java.lang.Integer", new HashSet<>() {{
+                    add(Modifier.STATIC);
+                }},},
+                {"age", "java.lang.Integer", new HashSet<>() {{
+                    add(Modifier.PRIVATE);
+                    add(Modifier.STATIC);
+                }},},
         };
     }
 
-    public JavaElementTest(boolean isStatic, String name, String type, Visibility visibility) {
-        this.javaElement = new JavaElementTestImplementation(name, new SimpleNameTypeMirror(type), visibility, isStatic);
-        this.isStatic = isStatic;
+    public JavaElementTest(String name, String type, Set<Modifier> modifiers) {
+        this.javaElement = new JavaElementTestImplementation(name, new SimpleNameTypeMirror(type), modifiers);
         this.name = name;
         this.type = type;
-        this.visibility = visibility;
+        this.modifiers = modifiers;
     }
 
 
     @Test
     public void isStatic() {
-        assertEquals(this.isStatic, this.javaElement.isStatic());
+        assertEquals(this.modifiers.contains(Modifier.STATIC), this.javaElement.isStatic());
     }
 
     @Test
@@ -65,15 +100,10 @@ public class JavaElementTest {
     }
 
     @Test
-    public void getVisibility() {
-        assertEquals(this.visibility, this.javaElement.getVisibility());
-    }
-
-    @Test
     public void toJavaString() {
         assertEquals(
-                (!this.visibility.equals(Visibility.PACKAGE_PRIVATE) ? this.visibility.value + " " : "")
-                        + (this.isStatic ? "static " : "")
+                (!Visibility.getVisibility(modifiers).equals(Visibility.PACKAGE_PRIVATE) ? Visibility.getVisibility(modifiers).value + " " : "")
+                        + (this.modifiers.contains(Modifier.STATIC) ? "static " : "")
                         + (this.type != null ? this.type : "void")
                         + " "
                         + this.name,
@@ -88,8 +118,8 @@ public class JavaElementTest {
 
 
     private static class JavaElementTestImplementation extends JavaElement {
-        public JavaElementTestImplementation(String name, TypeMirror type, Visibility visibility, boolean isStatic) {
-            super(isStatic, name, type, visibility);
+        public JavaElementTestImplementation(String name, TypeMirror type, Set<Modifier> modifiers) {
+            super(name, type, modifiers);
         }
     }
 }

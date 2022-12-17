@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ClassWriter implements Closeable {
 
@@ -23,7 +24,17 @@ public class ClassWriter implements Closeable {
     }
 
     public ClassWriter(PrintWriter printWriter, String name, String packageName, Visibility visibility) {
-        this(printWriter, new ClassStringBuilder(name, packageName, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), visibility));
+        this(
+                printWriter,
+                new ClassStringBuilder(
+                        name,
+                        packageName,
+                        new ArrayList<>(),
+                        new ArrayList<>(),
+                        new ArrayList<>(),
+                        Set.of(visibility.toModifier())
+                )
+        );
     }
 
     public List<AttributeStringBuilder> getAttributeStringBuilders() {

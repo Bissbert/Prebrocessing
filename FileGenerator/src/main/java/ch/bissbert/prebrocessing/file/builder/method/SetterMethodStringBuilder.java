@@ -2,9 +2,12 @@ package ch.bissbert.prebrocessing.file.builder.method;
 
 import ch.bissbert.prebrocessing.file.JavaElement;
 import ch.bissbert.prebrocessing.file.JavaStringable;
-import ch.bissbert.prebrocessing.file.Visibility;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
+import java.util.HashSet;
 
 /**
  * A class that contains the basic information for a setter as well as the producing the java code for it.
@@ -15,9 +18,19 @@ import javax.lang.model.type.TypeMirror;
  * @see JavaStringable
  * @since 1.0
  */
+@Getter
+@Setter
 final public class SetterMethodStringBuilder extends MethodStringBuilder {
     public SetterMethodStringBuilder(String name, TypeMirror type) {
-        super(false, generateSetterName(name), null, Visibility.PUBLIC, generateSetterText(name), generateParam(name, type));
+        super(
+                generateSetterName(name),
+                null,
+                generateSetterText(name),
+                new HashSet<>() {{
+                    add(Modifier.PUBLIC);
+                }},
+                generateParam(name, type)
+        );
     }
 
     private static String generateSetterName(final String name) {

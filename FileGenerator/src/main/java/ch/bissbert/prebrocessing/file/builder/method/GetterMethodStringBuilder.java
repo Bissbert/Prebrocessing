@@ -2,9 +2,12 @@ package ch.bissbert.prebrocessing.file.builder.method;
 
 import ch.bissbert.prebrocessing.file.JavaElement;
 import ch.bissbert.prebrocessing.file.JavaStringable;
-import ch.bissbert.prebrocessing.file.Visibility;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
+import java.util.HashSet;
 
 /**
  * A class that contains the basic information for a getter as well as the producing the java code for it.
@@ -16,9 +19,13 @@ import javax.lang.model.type.TypeMirror;
  * @see JavaStringable
  * @since 1.0
  */
+@Getter
+@Setter
 final public class GetterMethodStringBuilder extends MethodStringBuilder {
     public GetterMethodStringBuilder(String name, TypeMirror type) {
-        super(false, generateGetterName(name), type, Visibility.PUBLIC, generateGetterText(name));
+        super(generateGetterName(name), type, generateGetterText(name), new HashSet<>() {{
+            this.add(Modifier.PUBLIC);
+        }});
     }
 
     private static String generateGetterName(final String name) {
