@@ -1,7 +1,12 @@
 package ch.bissbert.prebrocessing.file;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
+import java.util.Set;
 
 /**
  * An abstract class that contains the basic information for an element as well as the producing the java code for a bare element.
@@ -10,43 +15,27 @@ import javax.lang.model.type.TypeMirror;
  * @version 1.0
  * @since 1.0
  */
+@Getter
+@Setter
 public abstract class JavaElement implements JavaStringable {
-    protected final boolean isStatic;
-    protected final String name;
-    protected final TypeMirror type;
-    protected final Visibility visibility;
+    protected Set<Modifier> modifiers;
+    protected String name;
+    protected TypeMirror type;
 
     public boolean isStatic() {
-        return isStatic;
+        return modifiers.contains(Modifier.STATIC);
     }
 
-    public JavaElement(boolean isStatic, String name, TypeMirror type, Visibility visibility) {
-        //check the visibility is not null
-        if (visibility == null) {
-            throw new IllegalArgumentException("visibility must not be null");
-        }
-
-        this.isStatic = isStatic;
+    protected JavaElement(String name, TypeMirror type, Set<Modifier> modifiers) {
+        this.modifiers = modifiers;
         this.name = name;
         this.type = type;
-        this.visibility = visibility;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public TypeMirror getType() {
-        return type;
-    }
-
-    public Visibility getVisibility() {
-        return visibility;
     }
 
     @Override
     public String toJavaString() {
-        return (!visibility.equals(Visibility.PACKAGE_PRIVATE) ? visibility.value + " " : "") + (isStatic ? "static " : "") + (type != null ? type.toString() : "void") + " " + name;
+        Visibility visibility = Visibility.getVisibility(modifiers);
+        return (!visibility.equals(Visibility.PACKAGE_PRIVATE) ? visibility.value + " " : "") + (isStatic() ? "static " : "") + (type != null ? type.toString() : "void") + " " + name;
     }
 
     @Override

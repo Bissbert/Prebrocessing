@@ -3,11 +3,14 @@ package ch.bissbert.prebrocessing.file.builder.method;
 import ch.bissbert.prebrocessing.file.JavaElement;
 import ch.bissbert.prebrocessing.file.JavaStringable;
 import ch.bissbert.prebrocessing.file.SimpleNameTypeMirror;
-import ch.bissbert.prebrocessing.file.Visibility;
 import ch.bissbert.prebrocessing.util.NameUtil;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A class that contains the basic information for a constructor as well as the producing the java code for it.
@@ -19,24 +22,26 @@ import java.util.List;
  * @see JavaStringable
  * @since 1.0
  */
+@Getter
+@Setter
 final public class ConstructorStringBuilder extends MethodStringBuilder {
 
     private final static String CONSTRUCTOR_NAME = "\\Constructor\\";
 
-    public ConstructorStringBuilder(String className, Visibility visibility, String methodContent, List<JavaMethodParamStringBuilder> paramBuilderList) {
-        super(false, CONSTRUCTOR_NAME, new SimpleNameTypeMirror(className), visibility, methodContent, paramBuilderList);
+    public ConstructorStringBuilder(String className, String methodContent, Set<Modifier> modifiers, List<JavaMethodParamStringBuilder> paramBuilderList) {
+        super(CONSTRUCTOR_NAME, new SimpleNameTypeMirror(className), methodContent, modifiers, paramBuilderList);
     }
 
-    public ConstructorStringBuilder(String className, Visibility visibility, String methodContent, JavaMethodParamStringBuilder... paramBuilderList) {
-        super(false, CONSTRUCTOR_NAME, new SimpleNameTypeMirror(className), visibility, methodContent, paramBuilderList);
+    public ConstructorStringBuilder(String className, String methodContent, Set<Modifier> modifiers, JavaMethodParamStringBuilder... paramBuilderList) {
+        super(CONSTRUCTOR_NAME, new SimpleNameTypeMirror(className), methodContent, modifiers, paramBuilderList);
     }
 
-    public ConstructorStringBuilder(TypeMirror classType, Visibility visibility, String methodContent, List<JavaMethodParamStringBuilder> paramBuilderList) {
-        super(false, CONSTRUCTOR_NAME, classType, visibility, methodContent, paramBuilderList);
+    public ConstructorStringBuilder(TypeMirror classType, String methodContent, Set<Modifier> modifiers, List<JavaMethodParamStringBuilder> paramBuilderList) {
+        super(CONSTRUCTOR_NAME, classType, methodContent, modifiers, paramBuilderList);
     }
 
-    public ConstructorStringBuilder(TypeMirror classType, Visibility visibility, String methodContent, JavaMethodParamStringBuilder... paramBuilderList) {
-        super(false, CONSTRUCTOR_NAME, classType, visibility, methodContent, paramBuilderList);
+    public ConstructorStringBuilder(TypeMirror classType, String methodContent, Set<Modifier> modifiers, JavaMethodParamStringBuilder... paramBuilderList) {
+        super(CONSTRUCTOR_NAME, classType, methodContent, modifiers, paramBuilderList);
     }
 
 

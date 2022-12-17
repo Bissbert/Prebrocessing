@@ -6,80 +6,76 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import javax.lang.model.element.Modifier;
+import java.util.Set;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
 public class AttributeStringBuilderTest {
 
-    private final boolean isStatic;
-    private final Visibility visibility;
     private final String expectedVisibility;
     private final String type;
     private final String name;
-    private final boolean isFinal;
+    private final Set<Modifier> modifiers;
     private AttributeStringBuilder attributeStringBuilder;
 
     @Parameterized.Parameters
     public static Object[][] data() {
         return new Object[][]{
-                // isFinal, isStatic, visibility, expectedVisibility, type, name
-                {false, false, Visibility.PUBLIC, "public", "java.lang.String", "name"},
-                {false, false, Visibility.PROTECTED, "protected", "java.lang.String", "name"},
-                {false, false, Visibility.PACKAGE_PRIVATE, "", "java.lang.String", "name"},
-                {false, false, Visibility.PRIVATE, "private", "java.lang.String", "name"},
-                {false, false, Visibility.PUBLIC, "public", "java.lang.Integer", "age"},
-                {false, false, Visibility.PROTECTED, "protected", "java.lang.Integer", "age"},
-                {false, false, Visibility.PACKAGE_PRIVATE, "", "java.lang.Integer", "age"},
-                {false, false, Visibility.PRIVATE, "private", "java.lang.Integer", "age"},
-                {false, true, Visibility.PUBLIC, "public", "java.lang.String", "name"},
-                {false, true, Visibility.PROTECTED, "protected", "java.lang.String", "name"},
-                {false, true, Visibility.PACKAGE_PRIVATE, "", "java.lang.String", "name"},
-                {false, true, Visibility.PRIVATE, "private", "java.lang.String", "name"},
-                {false, true, Visibility.PUBLIC, "public", "java.lang.Integer", "age"},
-                {false, true, Visibility.PROTECTED, "protected", "java.lang.Integer", "age"},
-                {false, true, Visibility.PACKAGE_PRIVATE, "", "java.lang.Integer", "age"},
-                {false, true, Visibility.PRIVATE, "private", "java.lang.Integer", "age"},
-                {true, false, Visibility.PUBLIC, "public", "java.lang.String", "name"},
-                {true, false, Visibility.PROTECTED, "protected", "java.lang.String", "name"},
-                {true, false, Visibility.PACKAGE_PRIVATE, "", "java.lang.String", "name"},
-                {true, false, Visibility.PRIVATE, "private", "java.lang.String", "name"},
-                {true, false, Visibility.PUBLIC, "public", "java.lang.Integer", "age"},
-                {true, false, Visibility.PROTECTED, "protected", "java.lang.Integer", "age"},
-                {true, false, Visibility.PACKAGE_PRIVATE, "", "java.lang.Integer", "age"},
-                {true, false, Visibility.PRIVATE, "private", "java.lang.Integer", "age"},
-                {true, true, Visibility.PUBLIC, "public", "java.lang.String", "name"},
-                {true, true, Visibility.PROTECTED, "protected", "java.lang.String", "name"},
-                {true, true, Visibility.PACKAGE_PRIVATE, "", "java.lang.String", "name"},
-                {true, true, Visibility.PRIVATE, "private", "java.lang.String", "name"},
-                {true, true, Visibility.PUBLIC, "public", "java.lang.Integer", "age"},
-                {true, true, Visibility.PROTECTED, "protected", "java.lang.Integer", "age"},
-                {true, true, Visibility.PACKAGE_PRIVATE, "", "java.lang.Integer", "age"},
-                {true, true, Visibility.PRIVATE, "private", "java.lang.Integer", "age"},
+                // expectedVisibility, type, name, modifiers
+                {"public", "java.lang.String", "name", Set.of(Modifier.PUBLIC)},
+                {"protected", "java.lang.String", "name", Set.of(Modifier.PROTECTED)},
+                {"", "java.lang.String", "name", Set.of()},
+                {"private", "java.lang.String", "name", Set.of(Modifier.PRIVATE)},
+                {"public", "java.lang.Integer", "age", Set.of(Modifier.PUBLIC)},
+                {"protected", "java.lang.Integer", "age", Set.of(Modifier.PROTECTED)},
+                {"", "java.lang.Integer", "age", Set.of()},
+                {"private", "java.lang.Integer", "age", Set.of(Modifier.PRIVATE)},
+                {"public", "java.lang.String", "name", Set.of(Modifier.PUBLIC, Modifier.STATIC)},
+                {"protected", "java.lang.String", "name", Set.of(Modifier.PROTECTED, Modifier.STATIC)},
+                {"", "java.lang.String", "name", Set.of(Modifier.STATIC)},
+                {"private", "java.lang.String", "name", Set.of(Modifier.PRIVATE, Modifier.STATIC)},
+                {"public", "java.lang.Integer", "age", Set.of(Modifier.PUBLIC, Modifier.STATIC)},
+                {"protected", "java.lang.Integer", "age", Set.of(Modifier.PROTECTED, Modifier.STATIC)},
+                {"", "java.lang.Integer", "age", Set.of(Modifier.STATIC)},
+                {"private", "java.lang.Integer", "age", Set.of(Modifier.PRIVATE, Modifier.STATIC)},
+                {"public", "java.lang.String", "name", Set.of(Modifier.PUBLIC, Modifier.FINAL)},
+                {"protected", "java.lang.String", "name", Set.of(Modifier.PROTECTED, Modifier.FINAL)},
+                {"", "java.lang.String", "name", Set.of(Modifier.FINAL)},
+                {"private", "java.lang.String", "name", Set.of(Modifier.PRIVATE, Modifier.FINAL)},
+                {"public", "java.lang.Integer", "age", Set.of(Modifier.PUBLIC, Modifier.FINAL)},
+                {"protected", "java.lang.Integer", "age", Set.of(Modifier.PROTECTED, Modifier.FINAL)},
+                {"", "java.lang.Integer", "age", Set.of(Modifier.FINAL)},
+                {"private", "java.lang.Integer", "age", Set.of(Modifier.PRIVATE, Modifier.FINAL)},
+                {"public", "java.lang.String", "name", Set.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)},
+                {"protected", "java.lang.String", "name", Set.of(Modifier.PROTECTED, Modifier.STATIC, Modifier.FINAL)},
+                {"", "java.lang.String", "name", Set.of(Modifier.STATIC, Modifier.FINAL)},
+                {"private", "java.lang.String", "name", Set.of(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)},
+                {"public", "java.lang.Integer", "age", Set.of(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)},
+                {"protected", "java.lang.Integer", "age", Set.of(Modifier.PROTECTED, Modifier.STATIC, Modifier.FINAL)},
+                {"", "java.lang.Integer", "age", Set.of(Modifier.STATIC, Modifier.FINAL)},
+                {"private", "java.lang.Integer", "age", Set.of(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)}
         };
     }
 
-    public AttributeStringBuilderTest(boolean isFinal, boolean isStatic, Visibility visibility, String expectedVisibility, String type, String name) {
-        this.isFinal = isFinal;
-        this.isStatic = isStatic;
-        this.visibility = visibility;
+    public AttributeStringBuilderTest(String expectedVisibility, String type, String name, Set<Modifier> modifiers) {
         this.expectedVisibility = expectedVisibility;
         this.type = type;
         this.name = name;
+        this.modifiers = modifiers;
 
         System.out.printf(
-                "Testing: %nisFinal=%s, %nisStatic=%s, %nvisibility=%s, %ntype=%s, %nname=%s%n",
-                isFinal,
-                isStatic,
-                visibility,
+                "Testing: %ntype=%s, %nname=%s, %nmodifiers=%s, %nexpectedVisibility=%s%n",
                 type,
-                name
+                name,
+                modifiers,
+                expectedVisibility
         );
         attributeStringBuilder = new AttributeStringBuilder(
-                isStatic,
-                isFinal,
                 name,
                 new SimpleNameTypeMirror(type),
-                visibility
+                modifiers
         );
 
     }
@@ -87,10 +83,10 @@ public class AttributeStringBuilderTest {
     @Test
     public void toJavaString() {
         assertEquals(
-                (isFinal ? "final " : "")
+                (modifiers.contains(Modifier.FINAL) ? "final " : "")
                         + expectedVisibility
-                        + (visibility.equals(Visibility.PACKAGE_PRIVATE) ? "" : " ")
-                        + (isStatic ? "static " : "")
+                        + (Visibility.getVisibility(modifiers).equals(Visibility.PACKAGE_PRIVATE) ? "" : " ")
+                        + (modifiers.contains(Modifier.STATIC) ? "static " : "")
                         + type
                         + " "
                         + name
@@ -102,6 +98,6 @@ public class AttributeStringBuilderTest {
 
     @Test
     public void isFinal() {
-        assertEquals(isFinal, attributeStringBuilder.isFinal());
+        assertEquals(modifiers.contains(Modifier.FINAL), attributeStringBuilder.isFinal());
     }
 }

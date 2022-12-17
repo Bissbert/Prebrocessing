@@ -2,9 +2,12 @@ package ch.bissbert.prebrocessing.file.builder;
 
 
 import ch.bissbert.prebrocessing.file.JavaElement;
-import ch.bissbert.prebrocessing.file.Visibility;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
+import java.util.Set;
 
 /**
  * A class that contains the basic information for an attribute as well as the producing the java code for it.
@@ -14,13 +17,11 @@ import javax.lang.model.type.TypeMirror;
  * @see JavaElement
  * @since 1.0
  */
+@Getter
+@Setter
 final public class AttributeStringBuilder extends JavaElement {
-
-    final boolean isFinal;
-
-    public AttributeStringBuilder(boolean isStatic, boolean isFinal, String name, TypeMirror type, Visibility visibility) {
-        super(isStatic, name, type, visibility);
-        this.isFinal = isFinal;
+    public AttributeStringBuilder(String name, TypeMirror type, Set<Modifier> modifiers) {
+        super(name, type, modifiers);
 
         //check that name is not empty or null or that type is null
         if (name == null || name.isEmpty() || type == null) {
@@ -28,9 +29,11 @@ final public class AttributeStringBuilder extends JavaElement {
         }
     }
 
+
     public boolean isFinal() {
-        return isFinal;
+        return modifiers.contains(Modifier.FINAL);
     }
+
 
     /**
      * Creates the java code string for a method.
@@ -39,6 +42,6 @@ final public class AttributeStringBuilder extends JavaElement {
      */
     @Override
     public String toJavaString() {
-        return (this.isFinal ? "final " : "") + super.toJavaString() + ";";
+        return (this.isFinal() ? "final " : "") + super.toJavaString() + ";";
     }
 }

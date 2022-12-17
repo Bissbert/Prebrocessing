@@ -1,13 +1,14 @@
 package ch.bissbert.prebrocessing.file.builder.method;
 
 import ch.bissbert.prebrocessing.file.SimpleNameTypeMirror;
-import ch.bissbert.prebrocessing.file.Visibility;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,38 +24,38 @@ public class MethodStringBuilderTest {
         TypeMirror stringType = new SimpleNameTypeMirror("java.lang.String");
         TypeMirror intType = new SimpleNameTypeMirror("java.lang.Integer");
         return new Object[][]{
-                {false, false, Visibility.PACKAGE_PRIVATE, "java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;"},
-                {false, false, Visibility.PACKAGE_PRIVATE, "java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;"},
-                {true, false, Visibility.PACKAGE_PRIVATE, "void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;"},
-                {true, false, Visibility.PACKAGE_PRIVATE, "void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;"},
-                {false, true, Visibility.PACKAGE_PRIVATE, "static java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;"},
-                {false, true, Visibility.PACKAGE_PRIVATE, "static java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;"},
-                {true, true, Visibility.PACKAGE_PRIVATE, "static void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;"},
-                {true, true, Visibility.PACKAGE_PRIVATE, "static void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;"},
-                {false, false, Visibility.PUBLIC, "public java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;"},
-                {false, false, Visibility.PUBLIC, "public java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;"},
-                {true, false, Visibility.PUBLIC, "public void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;"},
-                {true, false, Visibility.PUBLIC, "public void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;"},
-                {false, true, Visibility.PUBLIC, "public static java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;"},
-                {false, true, Visibility.PUBLIC, "public static java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;"},
-                {true, true, Visibility.PUBLIC, "public static void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;"},
-                {true, true, Visibility.PUBLIC, "public static void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;"},
-                {false, false, Visibility.PRIVATE, "private java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;"},
-                {false, false, Visibility.PRIVATE, "private java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;"},
-                {true, false, Visibility.PRIVATE, "private void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;"},
-                {true, false, Visibility.PRIVATE, "private void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;"},
-                {false, true, Visibility.PRIVATE, "private static java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;"},
-                {false, true, Visibility.PRIVATE, "private static java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;"},
-                {true, true, Visibility.PRIVATE, "private static void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;"},
-                {true, true, Visibility.PRIVATE, "private static void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;"},
-                {false, false, Visibility.PROTECTED, "protected java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;"},
-                {false, false, Visibility.PROTECTED, "protected java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;"},
-                {true, false, Visibility.PROTECTED, "protected void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;"},
-                {true, false, Visibility.PROTECTED, "protected void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;"},
-                {false, true, Visibility.PROTECTED, "protected static java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;"},
-                {false, true, Visibility.PROTECTED, "protected static java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;"},
-                {true, true, Visibility.PROTECTED, "protected static void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;"},
-                {true, true, Visibility.PROTECTED, "protected static void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;"},
+                {false, "java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;", Set.of()},
+                {false, "java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;", Set.of()},
+                {true, "void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;", Set.of()},
+                {true, "void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;", Set.of()},
+                {false, "static java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;", Set.of(Modifier.STATIC)},
+                {false, "static java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;", Set.of(Modifier.STATIC)},
+                {true, "static void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;", Set.of(Modifier.STATIC)},
+                {true, "static void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;", Set.of(Modifier.STATIC)},
+                {false, "public java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;", Set.of(Modifier.PUBLIC)},
+                {false, "public java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;", Set.of(Modifier.PUBLIC)},
+                {true, "public void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;", Set.of(Modifier.PUBLIC)},
+                {true, "public void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;", Set.of(Modifier.PUBLIC)},
+                {false, "public static java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;", Set.of(Modifier.PUBLIC, Modifier.STATIC)},
+                {false, "public static java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;", Set.of(Modifier.PUBLIC, Modifier.STATIC)},
+                {true, "public static void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;", Set.of(Modifier.PUBLIC, Modifier.STATIC)},
+                {true, "public static void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;", Set.of(Modifier.PUBLIC, Modifier.STATIC)},
+                {false, "private java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;", Set.of(Modifier.PRIVATE)},
+                {false, "private java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;", Set.of(Modifier.PRIVATE)},
+                {true, "private void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;", Set.of(Modifier.PRIVATE)},
+                {true, "private void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;", Set.of(Modifier.PRIVATE)},
+                {false, "private static java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;", Set.of(Modifier.PRIVATE, Modifier.STATIC)},
+                {false, "private static java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;", Set.of(Modifier.PRIVATE, Modifier.STATIC)},
+                {true, "private static void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;", Set.of(Modifier.PRIVATE, Modifier.STATIC)},
+                {true, "private static void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;", Set.of(Modifier.PRIVATE, Modifier.STATIC)},
+                {false, "protected java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;", Set.of(Modifier.PROTECTED)},
+                {false, "protected java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;", Set.of(Modifier.PROTECTED)},
+                {true, "protected void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;", Set.of(Modifier.PROTECTED)},
+                {true, "protected void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;", Set.of(Modifier.PROTECTED)},
+                {false, "protected static java.lang.String getName(){return this.name;}", "name", stringType, "getName", "return this.name;", Set.of(Modifier.PROTECTED, Modifier.STATIC)},
+                {false, "protected static java.lang.Integer getAge(){return this.age;}", "age", intType, "getAge", "return this.age;", Set.of(Modifier.PROTECTED, Modifier.STATIC)},
+                {true, "protected static void setName(java.lang.String name){return this.name;}", "name", stringType, "setName", "return this.name;", Set.of(Modifier.PROTECTED, Modifier.STATIC)},
+                {true, "protected static void setAge(java.lang.Integer age){return this.age;}", "age", intType, "setAge", "return this.age;", Set.of(Modifier.PROTECTED, Modifier.STATIC)},
         };
     }
 
@@ -64,27 +65,26 @@ public class MethodStringBuilderTest {
 
     private final MethodStringBuilder methodStringBuilder;
 
-    public MethodStringBuilderTest(boolean isSetter, boolean isStatic, Visibility visibility, String expected, String name, TypeMirror type, String methodName, String body) {
+    public MethodStringBuilderTest(boolean isSetter, String expected, String name, TypeMirror type, String methodName, String body, Set<Modifier> modifiers) {
         this.isSetter = isSetter;
         this.expected = expected;
         this.body = body;
 
         if (isSetter) {
-            methodStringBuilder = new MethodStringBuilder(isStatic, methodName, null, visibility, body, new JavaMethodParamStringBuilder(type, name, false));
+            methodStringBuilder = new MethodStringBuilder(methodName, null, body, modifiers, new JavaMethodParamStringBuilder(type, name));
         } else {
-            methodStringBuilder = new MethodStringBuilder(isStatic, methodName, type, visibility, body);
+            methodStringBuilder = new MethodStringBuilder(methodName, type, body, modifiers);
         }
 
         System.out.printf(
-                "isSetter: %s, isStatic: %s, visibility: %s, expected: %s, name: %s, type: %s, methodName: %s, body: %s%n",
+                "isSetter: %s,%nexpected: %s,%nname: %s,%n type: %s,%nmethodName: %s,%nbody: %s,%nmodifiers: %s%n",
                 isSetter,
-                isStatic,
-                visibility,
                 expected,
                 name,
                 type,
                 methodName,
-                body
+                body,
+                modifiers
         );
 
     }
