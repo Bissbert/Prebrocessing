@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
-import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A class that contains the basic information for a setter as well as the producing the java code for it.
@@ -26,9 +26,7 @@ final public class SetterMethodStringBuilder extends MethodStringBuilder {
                 generateSetterName(name),
                 null,
                 generateSetterText(name),
-                new HashSet<>() {{
-                    add(Modifier.PUBLIC);
-                }},
+                Set.of(Modifier.PUBLIC),
                 generateParam(name, type)
         );
     }

@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A class that contains the basic information for a getter as well as the producing the java code for it.
@@ -23,9 +24,7 @@ import java.util.HashSet;
 @Setter
 final public class GetterMethodStringBuilder extends MethodStringBuilder {
     public GetterMethodStringBuilder(String name, TypeMirror type) {
-        super(generateGetterName(name), type, generateGetterText(name), new HashSet<>() {{
-            this.add(Modifier.PUBLIC);
-        }});
+        super(generateGetterName(name), type, generateGetterText(name), Set.of(Modifier.PUBLIC));
     }
 
     private static String generateGetterName(final String name) {
